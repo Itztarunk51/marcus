@@ -1,77 +1,154 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-
+<!DOCTYPE html>
 <html>
-
-<head>
-  <title>Index</title>
-  <!-- Bootstrap -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="shortcut icon" type="png" href="favicon.png">
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
-  <link rel="stylesheet" href="sass/bootstrap.css">
-  <!-- Helps objects scale to mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
-<body style="background-color:black;">
-
-<div style="min-height: 5vh"></div>
-
-<div class="container">
-  <div style="min-height: 10vh">
-  <div class="row">
-    <div class="col text-center">
-      <button class="btn btn-outline-warning" id=enableEthereumButton></button>
-    </div>
-  </div>
-  </div>
+  <head>
+    <title>Sudoku Solver</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" />
+    <style>
+      .board {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 2px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+      .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        background-color: #eee;
+        color: #555;
+        height: 50px;
+        width: 50px;
+        border-radius: 2px;
+      }
+      .cell.input {
+        cursor: pointer;
+      }
+      .cell.input:hover {
+        background-color: #ddd;
+      }
+      .cell.selected {
+        background-color: #ffc;
+        color: #000;
+      }
+      .cell.conflict {
+        background-color: #fdd;
+      }
+      .button-container {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Sudoku Solver</h1>
+        <div class="field is-grouped">
+          <div class="control">
+            <button id="connect-wallet-button" class="button is-primary">Connect Wallet</button>
+          </div>
+          <div class="control">
+            <button id="solve-button" class="button is-primary" disabled>Compute Solution</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Did the player win?</label>
+          <div class="control">
+            <input id="did-the-player-win-input" class="input" type="text" placeholder="No" readonly>
+          </div>
+        </div>
+        <div class="board">
+          <div class="cell" data-row="0" data-col="0">5</div>
+          <div class="cell" data-row="0" data-col="1">3</div>
+          <div class="cell" data-row="0" data-col="2">0</div>
+          <div class="cell" data-row="0" data-col="3">0</div>
+          <div class="cell" data-row="0" data-col="4">7</div>
+          <div class="cell" data-row="0" data-col="5">0</div>
+          <div class="cell" data-row="0" data-col="6">0</div>
+          <div class="cell" data-row="0" data-col="7">0</div>
+          <div class="cell" data-row="0" data-col="8">0</div>
+          <div class="cell" data-row="1" data-col="0">6</div>
+          <div class="cell" data-row="1" data-col="1">0</div>
+          <div class="cell" data-row="1" data-col="2">0</div>
+          <div class="cell" data-row="1" data-col="3">1</div>
+          <div class="cell" data-row="1" data-col="4">9</div>
+<div class="cell" data-row="1" data-col="5">5</div>
+<div class="cell" data-row="1" data-col="6">0</div>
+<div class="cell" data-row="1" data-col="7">0</div>
+<div class="cell" data-row="1" data-col="8">0</div>
+<div class="cell" data-row="2" data-col="0">0</div>
+<div class="cell" data-row="2" data-col="1">9</div>
+<div class="cell" data-row="2" data-col="2">8</div>
+<div class="cell" data-row="2" data-col="3">0</div>
+<div class="cell" data-row="2" data-col="4">0</div>
+<div class="cell" data-row="2" data-col="5">0</div>
+<div class="cell" data-row="2" data-col="6">0</div>
+<div class="cell" data-row="2" data-col="7">6</div>
+<div class="cell" data-row="2" data-col="8">0</div>
+<div class="cell" data-row="3" data-col="0">8</div>
+<div class="cell" data-row="3" data-col="1">0</div>
+<div class="cell" data-row="3" data-col="2">0</div>
+<div class="cell" data-row="3" data-col="3">0</div>
+<div class="cell" data-row="3" data-col="4">6</div>
+<div class="cell" data-row="3" data-col="5">0</div>
+<div class="cell" data-row="3" data-col="6">0</div>
+<div class="cell" data-row="3" data-col="7">0</div>
+<div class="cell" data-row="3" data-col="8">3</div>
+<div class="cell" data-row="4" data-col="0">4</div>
+<div class="cell" data-row="4" data-col="1">0</div>
+<div class="cell" data-row="4" data-col="2">0</div>
+<div class="cell" data-row="4" data-col="3">8</div>
+<div class="cell" data-row="4" data-col="4">0</div>
+<div class="cell" data-row="4" data-col="5">3</div>
+<div class="cell" data-row="4" data-col="6">0</div>
+<div class="cell" data-row="4" data-col="7">0</div>
+<div class="cell" data-row="4" data-col="8">1</div>
+<div class="cell" data-row="5" data-col="0">7</div>
+<div class="cell" data-row="5" data-col="1">0</div>
+<div class="cell" data-row="5" data-col="2">0</div>
+<div class="cell" data-row="5" data-col="3">0</div>
+<div class="cell" data-row="5" data-col="4">0</div>
+<div class="cell" data-row="5" data-col="5">0</div>
+<div class="cell" data-row="5" data-col="6">0</div>
+<div class="cell" data-row="5" data-col="7">5</div>
+<div class="cell" data-row="5" data-col="8">0</div>
+<div class="cell" data-row="6" data-col="0">0</div>
+<div class="cell" data-row="6" data-col="1">3</div>
+<div class="cell" data-row="6" data-col="2">0</div>
+<div class="cell" data-row="6" data-col="3">0</div>
+<div class="cell" data-row="6" data-col="4">0</div>
+<div class="cell" data-row="6" data-col="5">0</div>
+<div class="cell" data-row="6" data-col="6">7</div>
+<div class="cell" data-row="6" data-col="7">4</div>
+<div class="cell" data-row="6" data-col="8">0</div>
+<div class="cell" data-row="7" data-col="0">0</div>
+<div class="cell" data-row="7" data-col="1">0</div>
+<div class="cell" data-row="7" data-col="2">5</div>
+<div class="cell" data-row="7" data-col="3">0</div>
+<div class="cell" data-row="7" data-col="4">0</div>
+<div class="cell" data-row="7" data-col="5">0</div>
+<div class="cell" data-row="7" data-col="6">0</div>
+<div class="cell" data-row="7" data-col="7">0</div>
+<div class="cell" data-row="7" data-col="8">8</div>
+<div class="cell" data-row="8" data-col="0">0</div>
+<div class="cell" data-row="8" data-col="1">0</div>
+<div class="cell" data-row="8" data-col="2">0</div>
+<div class="cell" data-row="8" data-col="3">0</div>
+<div class="cell" data-row="8" data-col="4">0</div>
+<div class="cell" data-row="8" data-col="5">0</div>
+<div class="cell" data-row="8" data-col="6">9</div>
+<div class="cell" data-row="8" data-col="7">0</div>
+<div class="cell" data-row="8" data-col="8">0</div>
 </div>
-
-<div class="container">
-<div style="min-height: 10vh">
-  <div class="row">
-    <div class="col text-center">
-      <p style="color:white">storedData uint: </p>
-      <p style="color:white" id="getValueStateSmartContract"></p>
-    </div>
-  </div>
- </div>
 </div>
-
-<div class="container">
- <div style="min-height: 6vh">
-  <div class="row">
-    <div class="col text-center">
-      <button class="changeStateInContractEvent btn btn-outline-light">"set(uint x)" Event uint valueChangeEventWenjs to absolute value: </button>
-    </div>
-  </div>
- </div>
+<button id="compute-win-btn">Compute Brute Force Win</button>
+<div id="result-container">
+<p>Your address: <span id="address"></span></p>
+<p>Did you win? <span id="win-status"></span></p>
 </div>
-
-<div class="container">
-  <div style="min-height: 14vh">
-    <div class="row">
-      <div class="col text-center">
-        <input type="text" style="text-align:center" id="setValueSmartContract" placeholder="input uint value">
-      </div>
-    </div>
-  </div>
-</div>
-
-<div style="min-height: 5vh"></div>
-
-<div class="container">
-  <div style="min-height: 5vh">
-  <div class="row">
-    <div class="col text-center">
-      <form action="https://github.com/MarcusWentz/Web3_Get_Set_Contract_Metamask">
-        <input type="submit" class="btn btn-outline-light" value="GitHub" />
-    </form>
-    </div>
-  </div>
 </div>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
